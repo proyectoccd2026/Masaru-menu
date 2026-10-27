@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Masaru Sushi – Carta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--card:#171414;--line:#2e2927;--red:#e0301e;--text:#f3eee8;--mute:#a39c94;
+--head:'Oswald','Arial Narrow',Impact,sans-serif;--body:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{background:var(--bg);color:var(--text);font:400 16px/1.45 var(--body);padding-bottom:env(safe-area-inset-bottom)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header{padding:calc(20px + env(safe-area-inset-top)) 0 18px;border-bottom:3px solid var(--red)}
+.brand{display:flex;gap:16px;align-items:center}
+.logo{width:92px;height:auto;border-radius:12px;background:#f6f1ea;padding:4px;flex:none}
+h1{font:700 30px/1.05 var(--head);letter-spacing:.01em}
+.tag{color:var(--mute);margin-top:2px}
+.state{display:inline-flex;gap:8px;align-items:center;margin-top:10px;font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--mute)}
+.open .dot{background:#3ecf6a}.closed .dot{background:var(--red)}
+.social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.social a{border:1px solid var(--line);border-radius:999px;padding:8px 14px;text-decoration:none;font-weight:600;background:var(--card)}
+.social a.wa{background:var(--red);border-color:var(--red)}
+.note{margin-top:14px;color:var(--mute);font-size:15px}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0 8px;padding-top:calc(10px + env(safe-area-inset-top))}
+#q{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--text);font:inherit;padding:11px 14px}
+#q::placeholder{color:var(--mute)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips a{flex:none;text-decoration:none;font:500 15px var(--head);letter-spacing:.02em;padding:6px 12px;border-radius:8px;border:1px solid var(--line);color:var(--mute)}
+.chips a:hover{color:var(--text);border-color:var(--red)}
+section{padding-top:26px}
+h2{font:700 26px/1.1 var(--head);padding-bottom:8px;border-bottom:1px solid var(--line)}
+.item{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
+.item.nonum{grid-template-columns:1fr auto}
+.num{font:700 30px/1 var(--head);color:var(--red);text-align:right}
+.name{font-weight:600;font-size:17px}
+.desc{color:var(--mute);font-size:15px;margin-top:2px}
+.price{font:700 20px/1.2 var(--head);white-space:nowrap}
+.sold .name,.sold .desc,.sold .price,.sold .num{opacity:.4}
+.sold .name::after{content:" · Agotado";color:var(--red);font-weight:600;opacity:1}
+.msg{padding:40px 0;color:var(--mute);text-align:center}
+footer{margin-top:40px;border-top:3px solid var(--red);padding:22px 0 36px;color:var(--mute);font-size:15px}
+footer h3{font:700 18px var(--head);color:var(--text);margin-bottom:6px}
+footer p+h3{margin-top:16px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand">
+    <img class="logo" src="logo.png" alt="Logo Masaru Sushi Delivery">
+    <div>
+      <h1>Masaru Sushi</h1>
+      <p class="tag">Sushi y delivery en Talagante</p>
+      <div class="state" id="state"><span class="dot"></span><span id="stateTxt">Revisando horario…</span></div>
+    </div>
+  </div>
+  <div class="social">
+    <a class="wa" href="https://wa.me/56977855021?text=Hola%20Masaru%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+    <a href="https://instagram.com/masaru_sushi_cl" target="_blank" rel="noopener">Instagram</a>
+    <a href="tel:+56228145483">Llamar</a>
+  </div>
+  <p class="note">Pronto podrás pedir directo desde esta página. Mientras tanto, elige tu pedido y envíanoslo por WhatsApp o teléfono.</p>
+</div></header>
+
+<div class="bar"><div class="wrap">
+  <input id="q" type="search" placeholder="Busca por nombre o por número del roll" aria-label="Buscar en la carta" autocomplete="off">
+  <nav class="chips" id="chips" aria-label="Categorías"></nav>
+</div></div>
+
+<main class="wrap" id="menu"><p class="msg">Cargando carta…</p></main>
+
+<footer><div class="wrap">
+  <h3>Local</h3>
+  <p>Avenida Bernardo O'Higgins 77, local 1, Talagante</p>
+  <h3>Horario</h3>
+  <p>Lunes a jueves: 12:30 a 16:00 y 17:00 a 22:00<br>Viernes y sábado: 12:30 a 16:00 y 17:00 a 23:00<br>Domingo: 12:30 a 16:00 y 17:00 a 21:00</p>
+  <h3>Contacto</h3>
+  <p>+56 2 2814 5483: <a href="tel:+56228145483">llamar</a> o <a href="https://wa.me/56228145483" target="_blank" rel="noopener">WhatsApp</a><br>
+  +56 2 3227 5974: <a href="tel:+56232275974">llamar</a> o <a href="https://wa.me/56232275974" target="_blank" rel="noopener">WhatsApp</a><br>
+  +56 9 7785 5021: <a href="tel:+56977855021">llamar</a> o <a href="https://wa.me/56977855021" target="_blank" rel="noopener">WhatsApp</a><br>
+  <a href="https://instagram.com/masaru_sushi_cl" target="_blank" rel="noopener">@masaru_sushi_cl</a></p>
+</div></footer>
+
+<script>
+const SB='https://aedniprxkwumzgajzuzx.supabase.co/rest/v1';
+const KEY='sb_publishable_0rVMck9H2OX1UlnzL7pKPA_V0kb-JqU';
+let cats=[],prods=[];
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const money=n=>'$'+Number(n).toLocaleString('es-CL');
+async function get(t,q){
+  const r=await fetch(SB+'/'+t+'?'+q,{headers:{apikey:KEY}});
+  if(!r.ok) throw new Error(t+' '+r.status);
+  return r.json();
+}
+
+function render(){
+  const term=norm(document.getElementById('q').value.trim());
+  const isNum=/^\d+$/.test(term);
+  const match=p=>!term||(isNum?String(p.numero)===term:norm(p.nombre+' '+(p.descripcion||'')).includes(term));
+  let html='',chips='';
+  for(const c of cats){
+    const list=prods.filter(p=>p.categoria_id===c.id&&match(p));
+    if(!list.length) continue;
+    chips+=`<a href="#c${c.id}">${esc(c.nombre)}</a>`;
+    html+=`<section id="c${c.id}"><h2>${esc(c.nombre)}</h2>`+list.map(p=>{
+      const hasNum=p.numero!=null;
+      const nombre=hasNum?p.nombre.replace(/^\d+\s+/,''):p.nombre;
+      return `<div class="item${hasNum?'':' nonum'}${p.disponible?'':' sold'}">`+
+        (hasNum?`<div class="num">${p.numero}</div>`:'')+
+        `<div><div class="name">${esc(nombre)}</div>${p.descripcion?`<div class="desc">${esc(p.descripcion)}</div>`:''}</div>`+
+        `<div class="price">${money(p.precio)}</div></div>`;
+    }).join('')+`</section>`;
+  }
+  document.getElementById('menu').innerHTML=html||'<p class="msg">No encontramos nada con esa búsqueda. Prueba con otro nombre o número.</p>';
+  document.getElementById('chips').innerHTML=chips;
+}
+
+function horario(){
+  const f=new Intl.DateTimeFormat('en-US',{timeZone:'America/Santiago',weekday:'short',hour:'numeric',minute:'numeric',hourCycle:'h23'}).formatToParts(new Date());
+  const g=t=>f.find(x=>x.type===t).value;
+  const dia=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(g('weekday'));
+  const min=+g('hour')*60+ +g('minute');
+  const cierre=(dia===0?21:(dia===5||dia===6)?23:22)*60;
+  const el=document.getElementById('state'),tx=document.getElementById('stateTxt');
+  const abierto=(min>=750&&min<960)||(min>=1020&&min<cierre);
+  el.className='state '+(abierto?'open':'closed');
+  if(abierto) tx.textContent='Abierto ahora, cierra a las '+(min<960?'16:00':cierre/60+':00');
+  else tx.textContent='Cerrado ahora, abre a las '+(min<750?'12:30':min<1020?'17:00':'12:30 mañana');
+}
+
+document.getElementById('q').addEventListener('input',render);
+horario();setInterval(horario,60000);
+Promise.all([get('categorias','select=*&order=orden'),get('productos','select=*&order=id')])
+  .then(([c,p])=>{cats=c;prods=p;render();})
+  .catch(()=>{document.getElementById('menu').innerHTML='<p class="msg">No pudimos cargar la carta. Revisa tu conexión y vuelve a intentarlo, o pídenos por WhatsApp.</p>';});
+</script>
+</body>
+</html>
