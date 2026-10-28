@@ -34,8 +34,9 @@ h1{font:700 30px/1.05 var(--head);letter-spacing:.01em}
 #q::placeholder{color:var(--mute)}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chips a{flex:none;text-decoration:none;font:500 15px var(--head);letter-spacing:.02em;padding:6px 12px;border-radius:8px;border:1px solid var(--line);color:var(--mute)}
-.chips a:hover{color:var(--text);border-color:var(--red)}
+.chips button{flex:none;cursor:pointer;background:none;font:500 15px var(--head);letter-spacing:.02em;padding:6px 12px;border-radius:8px;border:1px solid var(--line);color:var(--mute)}
+.chips button:hover{color:var(--text);border-color:var(--red)}
+.chips button.on{background:var(--red);border-color:var(--red);color:#fff}
 section{padding-top:26px}
 h2{font:700 26px/1.1 var(--head);padding-bottom:8px;border-bottom:1px solid var(--line)}
 .sub{font:500 20px/1.2 var(--head);color:var(--red);margin-top:22px;padding-bottom:2px}
@@ -101,7 +102,7 @@ footer p+h3{margin-top:16px}
 <script>
 const SB='https://aedniprxkwumzgajzuzx.supabase.co/rest/v1';
 const KEY='sb_publishable_0rVMck9H2OX1UlnzL7pKPA_V0kb-JqU';
-let cats=[],prods=[];
+let cats=[],prods=[],active=null;
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -124,19 +125,22 @@ function render(){
       `<div><div class="name">${esc(nombre)}</div>${p.descripcion?`<div class="desc">${esc(p.descripcion)}</div>`:''}</div>`+
       `<div class="price">${money(p.precio)}</div></div>`;
   };
-  let html='',chips='';
-  for(const c of cats.filter(x=>x.parentesco==null)){
+  const tops=cats.filter(x=>x.parentesco==null);
+  const sec=c=>{
     const own=prods.filter(p=>p.categoria_id===c.id&&match(p));
     const subHtml=cats.filter(x=>x.parentesco===c.id).map(s=>{
       const l=prods.filter(p=>p.categoria_id===s.id&&match(p));
       return l.length?`<h3 class="sub">${esc(s.nombre)}</h3>`+l.map(row).join(''):'';
     }).join('');
-    if(!own.length&&!subHtml) continue;
-    chips+=`<a href="#c${c.id}">${esc(c.nombre)}</a>`;
-    html+=`<section id="c${c.id}"><h2>${esc(c.nombre)}</h2>`+own.map(row).join('')+subHtml+`</section>`;
-  }
+    return (own.length||subHtml)?`<section id="c${c.id}"><h2>${esc(c.nombre)}</h2>`+own.map(row).join('')+subHtml+`</section>`:'';
+  };
+  if(active===null&&tops.length) active=tops[0].id;
+  const buscando=term!=='';
+  const html=(buscando?tops:tops.filter(c=>c.id===active)).map(sec).join('');
   document.getElementById('menu').innerHTML=html||'<p class="msg">No encontramos nada con esa búsqueda. Prueba con otro nombre o número.</p>';
-  document.getElementById('chips').innerHTML=chips;
+  const nav=document.getElementById('chips'),sl=nav.scrollLeft;
+  nav.innerHTML=tops.map(c=>`<button type="button" data-id="${c.id}"${!buscando&&c.id===active?' class="on" aria-current="true"':''}>${esc(c.nombre)}</button>`).join('');
+  nav.scrollLeft=sl;
 }
 
 function horario(){
@@ -153,6 +157,12 @@ function horario(){
 }
 
 document.getElementById('q').addEventListener('input',render);
+document.getElementById('chips').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  active=+b.dataset.id;document.getElementById('q').value='';render();
+  const on=document.querySelector('#chips .on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
+  const m=document.getElementById('menu');if(m.getBoundingClientRect().top<120)m.scrollIntoView({behavior:'smooth',block:'start'});
+});
 horario();setInterval(horario,60000);
 Promise.all([get('categorias','select=*&order=orden'),get('productos','select=*&order=id')])
   .then(([c,p])=>{cats=c;prods=p;render();})
