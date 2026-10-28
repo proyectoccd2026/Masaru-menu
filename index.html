@@ -49,6 +49,10 @@ h2{font:700 26px/1.1 var(--head);padding-bottom:8px;border-bottom:1px solid var(
 .sold .name::after{content:" · Agotado";color:var(--red);font-weight:600;opacity:1}
 .msg{padding:40px 0;color:var(--mute);text-align:center}
 footer{margin-top:40px;border-top:3px solid var(--red);padding:22px 0 36px;color:var(--mute);font-size:15px}
+.map{position:relative;height:170px;margin-top:12px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.map iframe{width:100%;height:100%;border:0;pointer-events:none}
+.map a{position:absolute;inset:0}
+.map span{position:absolute;right:8px;bottom:8px;background:var(--red);color:#fff;font-weight:600;font-size:14px;padding:5px 10px;border-radius:8px}
 footer h3{font:700 18px var(--head);color:var(--text);margin-bottom:6px}
 footer p+h3{margin-top:16px}
 </style>
@@ -81,6 +85,10 @@ footer p+h3{margin-top:16px}
 <footer><div class="wrap">
   <h3>Local</h3>
   <p>Avenida Bernardo O'Higgins 77, local 1, Talagante</p>
+  <div class="map">
+    <iframe src="https://maps.google.com/maps?q=-33.6593926,-70.9175167&z=17&output=embed" loading="lazy" title="Mapa de Masaru Sushi" tabindex="-1"></iframe>
+    <a href="https://maps.app.goo.gl/nvEY476h3fueTAP86" target="_blank" rel="noopener" aria-label="Abrir la ubicación de Masaru Sushi en Google Maps"><span>Abrir en Google Maps</span></a>
+  </div>
   <h3>Horario</h3>
   <p>Lunes a jueves: 12:30 a 16:00 y 17:00 a 22:00<br>Viernes y sábado: 12:30 a 16:00 y 17:00 a 23:00<br>Domingo: 12:30 a 16:00 y 17:00 a 21:00</p>
   <h3>Contacto</h3>
