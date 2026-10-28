@@ -38,6 +38,7 @@ h1{font:700 30px/1.05 var(--head);letter-spacing:.01em}
 .chips a:hover{color:var(--text);border-color:var(--red)}
 section{padding-top:26px}
 h2{font:700 26px/1.1 var(--head);padding-bottom:8px;border-bottom:1px solid var(--line)}
+.sub{font:500 20px/1.2 var(--head);color:var(--red);margin-top:22px;padding-bottom:2px}
 .item{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
 .item.nonum{grid-template-columns:1fr auto}
 .num{font:700 30px/1 var(--head);color:var(--red);text-align:right}
@@ -107,19 +108,24 @@ function render(){
   const term=norm(document.getElementById('q').value.trim());
   const isNum=/^\d+$/.test(term);
   const match=p=>!term||(isNum?String(p.numero)===term:norm(p.nombre+' '+(p.descripcion||'')).includes(term));
+  const row=p=>{
+    const hasNum=p.numero!=null;
+    const nombre=hasNum?p.nombre.replace(/^\d+\s+/,''):p.nombre;
+    return `<div class="item${hasNum?'':' nonum'}${p.disponible?'':' sold'}">`+
+      (hasNum?`<div class="num">${p.numero}</div>`:'')+
+      `<div><div class="name">${esc(nombre)}</div>${p.descripcion?`<div class="desc">${esc(p.descripcion)}</div>`:''}</div>`+
+      `<div class="price">${money(p.precio)}</div></div>`;
+  };
   let html='',chips='';
-  for(const c of cats){
-    const list=prods.filter(p=>p.categoria_id===c.id&&match(p));
-    if(!list.length) continue;
+  for(const c of cats.filter(x=>x.parentesco==null)){
+    const own=prods.filter(p=>p.categoria_id===c.id&&match(p));
+    const subHtml=cats.filter(x=>x.parentesco===c.id).map(s=>{
+      const l=prods.filter(p=>p.categoria_id===s.id&&match(p));
+      return l.length?`<h3 class="sub">${esc(s.nombre)}</h3>`+l.map(row).join(''):'';
+    }).join('');
+    if(!own.length&&!subHtml) continue;
     chips+=`<a href="#c${c.id}">${esc(c.nombre)}</a>`;
-    html+=`<section id="c${c.id}"><h2>${esc(c.nombre)}</h2>`+list.map(p=>{
-      const hasNum=p.numero!=null;
-      const nombre=hasNum?p.nombre.replace(/^\d+\s+/,''):p.nombre;
-      return `<div class="item${hasNum?'':' nonum'}${p.disponible?'':' sold'}">`+
-        (hasNum?`<div class="num">${p.numero}</div>`:'')+
-        `<div><div class="name">${esc(nombre)}</div>${p.descripcion?`<div class="desc">${esc(p.descripcion)}</div>`:''}</div>`+
-        `<div class="price">${money(p.precio)}</div></div>`;
-    }).join('')+`</section>`;
+    html+=`<section id="c${c.id}"><h2>${esc(c.nombre)}</h2>`+own.map(row).join('')+subHtml+`</section>`;
   }
   document.getElementById('menu').innerHTML=html||'<p class="msg">No encontramos nada con esa búsqueda. Prueba con otro nombre o número.</p>';
   document.getElementById('chips').innerHTML=chips;
