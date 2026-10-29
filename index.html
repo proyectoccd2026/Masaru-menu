@@ -16,7 +16,7 @@ html{scroll-behavior:smooth;scroll-padding-top:120px}
 body{background:var(--bg);color:var(--text);font:400 16px/1.45 var(--body);padding-bottom:env(safe-area-inset-bottom)}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+.wrap{max-width:1900px;margin:0 auto;padding:0 16px}
 header{padding:calc(20px + env(safe-area-inset-top)) 0 18px;border-bottom:3px solid var(--red)}
 .brand{display:flex;gap:16px;align-items:center}
 .logo{width:92px;height:auto;flex:none}
@@ -28,9 +28,9 @@ h1{font:700 30px/1.05 var(--head);letter-spacing:.01em}
 .social{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .social a{border:1px solid var(--line);border-radius:999px;padding:8px 14px;text-decoration:none;font-weight:600;background:var(--card)}
 .social a.wa{background:var(--red);border-color:var(--red)}
-.note{margin-top:14px;color:var(--mute);font-size:15px}
+.note{margin-top:14px;color:var(--mute);font-size:15px;max-width:760px}
 .bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0 8px;padding-top:calc(10px + env(safe-area-inset-top))}
-#q{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--text);font:inherit;padding:11px 14px}
+#q{width:100%;max-width:560px;display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--text);font:inherit;padding:11px 14px}
 #q::placeholder{color:var(--mute)}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
@@ -43,7 +43,7 @@ h2{font:700 26px/1.1 var(--head);padding-bottom:8px;border-bottom:1px solid var(
 .promos::-webkit-scrollbar{display:none}
 .promo{flex:0 0 68%;scroll-snap-align:start;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
 .promo img{display:block;width:100%;height:auto}
-@media(min-width:640px){.promos{overflow:visible}.promo{flex:1 1 0;min-width:0}}
+@media(min-width:640px){.promos{overflow:visible}.promo{flex:0 1 420px;min-width:0}}
 .sub{font:500 20px/1.2 var(--head);color:var(--red);margin-top:22px;padding-bottom:2px}
 .item{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
 .item.nonum{grid-template-columns:1fr auto}
@@ -59,6 +59,13 @@ footer{margin-top:40px;border-top:3px solid var(--red);padding:22px 0 36px;color
 .map iframe{width:100%;height:100%;border:0;pointer-events:none}
 .map a{position:absolute;inset:0}
 .map span{position:absolute;right:8px;bottom:8px;background:var(--red);color:#fff;font-weight:600;font-size:14px;padding:5px 10px;border-radius:8px}
+section>h2,section>.sub,section>.promos{grid-column:1/-1}
+@media(min-width:900px){.wrap{padding:0 32px}section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}}
+@media(min-width:1400px){section{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1750px){section{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.fgrid{display:grid;gap:20px}
+@media(min-width:900px){.fgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}}
+.fcol .map{max-width:520px}
 footer h3{font:700 18px var(--head);color:var(--text);margin-bottom:6px}
 footer p+h3{margin-top:16px}
 </style>
@@ -88,20 +95,20 @@ footer p+h3{margin-top:16px}
 
 <main class="wrap" id="menu"><p class="msg">Cargando carta…</p></main>
 
-<footer><div class="wrap">
-  <h3>Local</h3>
+<footer><div class="wrap fgrid">
+  <div class="fcol"><h3>Local</h3>
   <p>Avenida Bernardo O'Higgins 77, local 1, Talagante</p>
   <div class="map">
     <iframe src="https://maps.google.com/maps?q=-33.6593926,-70.9175167&z=17&output=embed" loading="lazy" title="Mapa de Masaru Sushi" tabindex="-1"></iframe>
     <a href="https://maps.app.goo.gl/nvEY476h3fueTAP86" target="_blank" rel="noopener" aria-label="Abrir la ubicación de Masaru Sushi en Google Maps"><span>Abrir en Google Maps</span></a>
-  </div>
-  <h3>Horario</h3>
-  <p>Lunes a jueves: 12:30 a 16:00 y 17:00 a 22:00<br>Viernes y sábado: 12:30 a 16:00 y 17:00 a 23:00<br>Domingo: 12:30 a 16:00 y 17:00 a 21:00</p>
-  <h3>Contacto</h3>
+  </div></div>
+  <div class="fcol"><h3>Horario</h3>
+  <p>Lunes a jueves: 12:30 a 16:00 y 17:00 a 22:00<br>Viernes y sábado: 12:30 a 16:00 y 17:00 a 23:00<br>Domingo: 12:30 a 16:00 y 17:00 a 21:00</p></div>
+  <div class="fcol"><h3>Contacto</h3>
   <p>+56 2 2814 5483: <a href="tel:+56228145483">llamar</a> o <a href="https://wa.me/56228145483" target="_blank" rel="noopener">WhatsApp</a><br>
   +56 2 3227 5974: <a href="tel:+56232275974">llamar</a> o <a href="https://wa.me/56232275974" target="_blank" rel="noopener">WhatsApp</a><br>
   +56 9 7785 5021: <a href="tel:+56977855021">llamar</a> o <a href="https://wa.me/56977855021" target="_blank" rel="noopener">WhatsApp</a><br>
-  <a href="https://instagram.com/masaru_sushi_cl" target="_blank" rel="noopener">@masaru_sushi_cl</a></p>
+  <a href="https://instagram.com/masaru_sushi_cl" target="_blank" rel="noopener">@masaru_sushi_cl</a></p></div>
 </div></footer>
 
 <script>
